@@ -10,6 +10,21 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
+func checkDeviceExist(dev string) bool {
+	devices, err := pcap.FindAllDevs()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, dv := range devices {
+		if dv.Name == dev {
+			return true
+		}
+	}
+
+	return false
+}
+
 func enumerateDevices() {
 	devices, err := pcap.FindAllDevs()
 	if err != nil {
@@ -25,6 +40,8 @@ func enumerateDevices() {
 }
 
 func main() {
+	fmt.Printf("ens33 exist - %v\n", checkDeviceExist("ens33"))
+
 	strEcho := "hallo\n"
 	servAddr := "localhost:8081"
 	tcpAddr, err := net.ResolveTCPAddr("tcp", servAddr)
